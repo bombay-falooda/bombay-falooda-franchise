@@ -114,13 +114,27 @@ export default function PosDevicesPage() {
                   : "Permanent"}
               </td>
               <td className="px-5 py-4">
-                <div className="flex flex-wrap gap-2">
-                  <button className="btn-secondary" type="button" onClick={() => setConfirmStatus({ id: device.id, status: "INACTIVE" })}>
-                    Close
-                  </button>
-                  <button className="btn-secondary" type="button" onClick={() => setConfirmStatus({ id: device.id, status: "ACTIVE" })}>
-                    Open
-                  </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Link className="btn-primary text-xs" href={`/pos-devices/${device.id}`}>
+                    View Details
+                  </Link>
+                  {device.status === "ACTIVE" ? (
+                    <button
+                      className="btn-secondary text-xs text-red-600 border-red-200 hover:bg-red-50"
+                      type="button"
+                      onClick={() => setConfirmStatus({ id: device.id, status: "INACTIVE" })}
+                    >
+                      Disable
+                    </button>
+                  ) : (
+                    <button
+                      className="btn-secondary text-xs text-green-700 border-green-200 hover:bg-green-50"
+                      type="button"
+                      onClick={() => setConfirmStatus({ id: device.id, status: "ACTIVE" })}
+                    >
+                      Enable
+                    </button>
+                  )}
                 </div>
               </td>
             </tr>

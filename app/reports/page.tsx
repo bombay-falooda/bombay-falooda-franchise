@@ -88,7 +88,13 @@ export default function ReportsPage() {
 
   return (
     <AppShell>
-      <PageTitle title="Reports" description="Sales, orders, outlet, item and POS performance from real billing data." />
+      <div className="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between mb-2">
+        <PageTitle title="Reports" description="Sales, orders, outlet, item and POS performance from real billing data." />
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-teal-200 bg-teal-50 px-3.5 py-1.5 text-xs font-semibold text-teal-800 shadow-xs">
+          <span>ℹ️</span>
+          <span>Reporting history is capped at a 1-Month max window for Franchise Owners</span>
+        </div>
+      </div>
 
       <section className="bf-panel mb-4 grid gap-3 p-4 xl:grid-cols-[1fr_auto_auto]">
         <div className="flex flex-wrap gap-2">

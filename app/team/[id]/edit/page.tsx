@@ -45,10 +45,15 @@ export default function EditTeamMemberPage() {
       setForm({
         name: member.name,
         email: member.email || "",
+        countryCode: (member as any).countryCode || "+91",
         phone: member.phone || "",
         password: "",
         role: member.role === "POS_USER" ? "POS_USER" : "STAFF",
         outletId: member.outletId || "",
+        address: (member as any).address || "",
+        state: (member as any).state || "Gujarat",
+        city: (member as any).city || "Surat",
+        pincode: (member as any).pincode || "",
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not load team member");

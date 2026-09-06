@@ -82,9 +82,17 @@ export type LoginResponse =
       };
     };
 
-export type PhoneOtpResponse = {
-  status: "PHONE_OTP_SENT";
-  loginOtpToken: string;
-  expiresInSeconds: number;
-  devOtp?: string;
-};
+export type PhoneOtpResponse =
+  | {
+      status: "PHONE_OTP_SENT";
+      loginOtpToken: string;
+      expiresInSeconds: number;
+      devOtp?: string;
+    }
+  | {
+      status: "2FA_REQUIRED";
+      method?: "AUTH_APP" | "OTP";
+      twoFactorToken: string;
+      expiresInSeconds: number;
+      devOtp?: string;
+    };

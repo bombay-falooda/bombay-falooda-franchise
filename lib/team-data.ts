@@ -15,19 +15,29 @@ export type TeamMember = {
 export type TeamFormState = {
   name: string;
   email: string;
+  countryCode: string;
   phone: string;
   password: string;
   role: "STAFF" | "POS_USER";
   outletId: string;
+  address: string;
+  state: string;
+  city: string;
+  pincode: string;
 };
 
 export const blankTeamForm: TeamFormState = {
   name: "",
   email: "",
+  countryCode: "+91",
   phone: "",
   password: "",
   role: "STAFF",
   outletId: "",
+  address: "",
+  state: "Gujarat",
+  city: "Surat",
+  pincode: "",
 };
 
 export async function loadTeamData() {

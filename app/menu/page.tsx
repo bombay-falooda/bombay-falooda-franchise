@@ -9,6 +9,7 @@ import { MetricCard } from "@/components/metric-card";
 import { PageTitle } from "@/components/page-title";
 import { ResultDialog } from "@/components/result-dialog";
 import { StatusBadge } from "@/components/status-badge";
+import { apiRequest } from "@/lib/api";
 import {
   flattenMenuAddons,
   loadMenuData,
@@ -101,6 +102,18 @@ export default function MenuPage() {
     }
   }
 
+  async function handleToggleItemStatus(itemId: string, currentStatus: boolean) {
+    try {
+      await apiRequest(`/franchise-portal/menu/items/${itemId}`, {
+        method: "PATCH",
+        body: { isActive: !currentStatus },
+      });
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not toggle item status");
+    }
+  }
+
   const primaryHref =
     view === "categories"
       ? "/menu/categories/add"
@@ -183,7 +196,7 @@ export default function MenuPage() {
       {loading ? (
         <div className="bf-panel p-5 text-sm font-semibold text-[#647876]">Loading menu...</div>
       ) : view === "items" ? (
-        <ItemsTable items={filteredItems} />
+        <ItemsTable items={filteredItems} onToggleStatus={handleToggleItemStatus} />
       ) : view === "categories" ? (
         <CategoriesTable categories={filteredCategories} />
       ) : (
@@ -201,7 +214,13 @@ export default function MenuPage() {
   );
 }
 
-function ItemsTable({ items }: { items: MenuItem[] }) {
+function ItemsTable({
+  items,
+  onToggleStatus,
+}: {
+  items: MenuItem[];
+  onToggleStatus: (itemId: string, currentStatus: boolean) => void;
+}) {
   if (!items.length) {
     return <EmptyState text="No menu items match this filter." />;
   }
@@ -209,7 +228,7 @@ function ItemsTable({ items }: { items: MenuItem[] }) {
   return (
     <DataTable columns={["Item", "Category", "Price", "Add-ons", "Outlets", "Status", "Actions"]}>
       {items.map((item) => (
-        <tr key={item.id} className="hover:bg-[#f2fbf9]">
+        <tr key={item.id} className={`hover:bg-[#f2fbf9] ${!item.isActive ? "bg-slate-50/80 opacity-75" : ""}`}>
           <td className="px-5 py-4">
             <div className="font-bold text-[#10201f]">{item.name}</div>
             <div className="mt-1 max-w-[340px] truncate text-xs font-semibold text-[#647876]">
@@ -230,7 +249,18 @@ function ItemsTable({ items }: { items: MenuItem[] }) {
             {item.outletMenuItems?.length || 0} outlets
           </td>
           <td className="px-5 py-4">
-            <StatusBadge value={item.isActive} />
+            <button
+              type="button"
+              onClick={() => onToggleStatus(item.id, item.isActive)}
+              className={`h-8 px-3 rounded-[12px] text-xs font-semibold border transition flex items-center gap-1.5 ${
+                item.isActive
+                  ? "bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100"
+                  : "bg-red-50 text-red-800 border-red-300 hover:bg-red-100"
+              }`}
+            >
+              <span className={`h-2 w-2 rounded-full ${item.isActive ? "bg-emerald-500" : "bg-red-500"}`} />
+              <span>{item.isActive ? "Active" : "Inactive"}</span>
+            </button>
           </td>
           <td className="px-5 py-4">
             <div className="flex flex-wrap gap-2">

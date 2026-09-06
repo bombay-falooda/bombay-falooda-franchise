@@ -173,9 +173,8 @@ export default function EditOutletPage() {
             ))}
             <div className="flex h-11 items-center gap-2 rounded-[12px] border border-[#d8e8e5] bg-white/70 px-3 text-sm font-bold text-[#244442]">
               <span
-                className={`h-2.5 w-2.5 rounded-full ${
-                  form.delivery ? "bg-[#22c55e]" : "bg-[#cbd5e1]"
-                }`}
+                className={`h-2.5 w-2.5 rounded-full ${form.delivery ? "bg-[#22c55e]" : "bg-[#cbd5e1]"
+                  }`}
               />
               Delivery {form.delivery ? "Enabled" : "Disabled"} by Superadmin
             </div>
@@ -184,7 +183,7 @@ export default function EditOutletPage() {
           <section className="bf-panel grid gap-3 p-4 md:grid-cols-2">
             <div>
               <h2 className="font-display text-lg font-bold text-[#10201f]">
-                Outlet Base Charge
+                Plaftform Fee
               </h2>
               <p className="mt-1 text-sm font-semibold text-[#647876]">
                 This charge applies to dine-in, takeaway and delivery orders for this outlet.
@@ -195,7 +194,7 @@ export default function EditOutletPage() {
               type="number"
               min="0"
               step="0.01"
-              placeholder="Outlet base charge INR"
+              placeholder="Platform fee INR"
               value={form.outletBaseCharge}
               onChange={(event) =>
                 setForm({ ...form, outletBaseCharge: event.target.value })

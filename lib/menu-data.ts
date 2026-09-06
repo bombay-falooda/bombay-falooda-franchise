@@ -13,6 +13,7 @@ export type Category = {
 export type MenuItem = {
   id: string;
   categoryId: string;
+  subCategory?: string | null;
   name: string;
   description: string | null;
   imageUrl: string | null;
@@ -66,6 +67,8 @@ export const blankCategory = { id: "", name: "", sortOrder: 0, isActive: true };
 export const blankItem = {
   id: "",
   categoryId: "",
+  subCategory: "",
+  categoryName: "",
   name: "",
   description: "",
   imageUrl: "",

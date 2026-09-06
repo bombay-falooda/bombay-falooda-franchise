@@ -80,15 +80,15 @@ export default function OutletDetailPage() {
               <Info label="Takeaway" value={outlet.takeaway ? "Enabled" : "Disabled"} />
               <Info label="Delivery" value={outlet.delivery ? "Enabled" : "Disabled"} />
               <Info label="Online Ordering" value={outlet.onlineOrderingEnabled ? "Enabled" : "Disabled"} />
-              <Info label="Outlet Base Charge" value={`INR ${outlet.outletBaseCharge || "0"}`} />
+              <Info label="Platform Fee" value={`INR ${outlet.outletBaseCharge || "0"}`} />
               <Info label="Service Radius" value={`${outlet.serviceRadiusKm || "0"} km`} />
               <Info
                 label="Delivery Pricing"
                 value={
                   outlet.delivery
                     ? (outlet.deliveryKmPricing || [])
-                        .map((row) => `${row.km} km = INR ${row.price}`)
-                        .join(", ") || "No slabs added"
+                      .map((row) => `${row.km} km = INR ${row.price}`)
+                      .join(", ") || "No slabs added"
                     : "Delivery disabled"
                 }
               />

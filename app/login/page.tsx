@@ -5,11 +5,13 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { ResultDialog } from "@/components/result-dialog";
+import { CountryCodePicker } from "@/components/country-code-picker";
 import { apiRequest, type LoginResponse, type PhoneOtpResponse } from "@/lib/api";
 import { saveAuthSession } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [countryDialCode, setCountryDialCode] = useState("+91");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [loginOtpToken, setLoginOtpToken] = useState("");
@@ -25,11 +27,21 @@ export default function LoginPage() {
 
     try {
       if (step === "PHONE") {
+        const fullPhone = `${countryDialCode}${phone.trim().replace(/^0+/, "")}`;
         const response = await apiRequest<PhoneOtpResponse>("/auth/request-login-otp", {
           method: "POST",
           auth: false,
-          body: { phone: phone.trim() },
+          body: { phone: fullPhone },
         });
+
+        if ("status" in response && response.status === "2FA_REQUIRED") {
+          sessionStorage.setItem("bf_franchise_two_factor_token", response.twoFactorToken);
+          if (response.devOtp) {
+            sessionStorage.setItem("bf_franchise_dev_otp", response.devOtp);
+          }
+          router.push("/verify-2fa");
+          return;
+        }
 
         setLoginOtpToken(response.loginOtpToken);
         setDevOtp(response.devOtp || "");
@@ -143,7 +155,21 @@ export default function LoginPage() {
               {step === "PHONE" ? (
                 <div>
                   <label className="mb-2 block text-xs font-semibold text-[#5b6378]" htmlFor="phone">Phone number</label>
-                  <input id="phone" className="h-11 w-full rounded-[8px] border border-[#e3e8f4] bg-white px-4 text-sm text-[#202638] outline-none transition focus:border-[#3157f4] focus:shadow-[0_0_0_4px_rgba(49,87,244,0.1)]" placeholder="+919999999999" value={phone} onChange={(event) => setPhone(event.target.value)} />
+                  <div className="flex items-center gap-2">
+                    <CountryCodePicker
+                      value={countryDialCode}
+                      onChange={setCountryDialCode}
+                    />
+                    <input
+                      id="phone"
+                      type="tel"
+                      className="h-11 min-w-0 flex-1 rounded-[8px] border border-[#e3e8f4] bg-white px-4 text-sm font-medium text-[#202638] outline-none transition focus:border-[#3157f4] focus:shadow-[0_0_0_4px_rgba(49,87,244,0.1)]"
+                      placeholder="99999 99999"
+                      value={phone}
+                      onChange={(event) => setPhone(event.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
               ) : (
                 <>
