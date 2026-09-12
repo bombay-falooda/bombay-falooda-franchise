@@ -15,6 +15,7 @@ export default function LoginPage() {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [loginOtpToken, setLoginOtpToken] = useState("");
+  const [devOtp, setDevOtp] = useState("");
   const [step, setStep] = useState<"PHONE" | "OTP">("PHONE");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
